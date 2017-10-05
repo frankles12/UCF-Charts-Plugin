@@ -26,6 +26,18 @@ gulp.task('es-lint', function() {
 });
 
 gulp.task('js-build', function() {
+  return gulp.src(config.src.js + '/script.js')
+    .pipe(include({
+      includePaths: [config.src.js]
+    }))
+    .on('error', console.log)
+    .pipe(babel())
+    .pipe(uglify())
+    .pipe(rename('ucf-chart.min.js'))
+    .pipe(gulp.dest(config.dist.js));
+});
+
+gulp.task('js-admin-build', function() {
   return gulp.src(config.src.js + '/admin.js')
     .pipe(include({
       includePaths: [config.src.js]
@@ -38,7 +50,7 @@ gulp.task('js-build', function() {
 });
 
 gulp.task('js', function() {
-  runSequence('es-lint', 'js-build');
+  runSequence('es-lint', 'js-build', 'js-admin-build');
 });
 
 gulp.task('readme', function() {

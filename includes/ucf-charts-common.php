@@ -25,5 +25,9 @@ if ( ! class_exists( 'UCF_Chart_Common' ) ) {
 
 			return $chart_types;
 		}
+
+		public static function enqueue_frontend_assets() {
+
+		}
 	}
 }
