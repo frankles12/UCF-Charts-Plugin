@@ -7,7 +7,7 @@ Description: Provides shortcode for creating chart.js charts.
 Plugin URL: https://github.com/UCF/UCF-Charts-Plugin/
 Tags: chart.js,shortcodes
 */
-if ( ! defined( WP_INC ) ) {
+if ( ! defined( 'WP_INC' ) ) {
     die;
 }
 
