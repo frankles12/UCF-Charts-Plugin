@@ -8,7 +8,6 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 			$option_prefix    = 'ucf_charts_',
 			$options_defaults = array(
 				'include_js'     => True,
-				'include_css'    => True,
 				'include_fields' => True
 			);
 
@@ -22,7 +21,6 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 			$defaults = self::$options_defaults;
 
 			add_option( self::$option_prefix . 'include_js',     $defaults['include_js']  );
-			add_option( self::$option_prefix . 'include_css',    $defaults['include_css'] );
 			add_option( self::$option_prefix . 'include_fields', $defaults['include_fields'] );
 		}
 
@@ -34,7 +32,6 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		 **/
 		public static function delete_options() {
 			delete_option( self::$option_prefix . 'include_js' );
-			delete_option( self::$option_prefix . 'include_css' );
 			delete_option( self::$option_prefix . 'include_fields' );
 		}
 
@@ -49,8 +46,7 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 			$defaults = self::$options_defaults;
 
 			$configurable_defaults = array(
-				'include_js'     => get_option( self::$option_prefix . 'include_css' ),
-				'include_css'    => get_option( self::$option_prefix . 'include_js' ),
+				'include_js'     => get_option( self::$option_prefix . 'include_js' ),
 				'include_fields' => get_option( self::$option_prefix . 'include_fields' )
 			);
 
@@ -96,7 +92,6 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static function format_options( $list ) {
 			foreach( $list as $key => $val ) {
 				switch( $key ) {
-					case 'include_css'    :
 					case 'include_js'     :
 					case 'include_fields' :
 						$list[$key] = filter_var( $val, FILTER_VALIDATE_BOOLEAN );
@@ -141,24 +136,6 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 				'Included Assets',
 				null,
 				'ucf_chart'
-			);
-
-			register_setting(
-				'ucf_chart',
-				self::$option_prefix . 'include_css'
-			);
-
-			add_settings_field(
-				self::$option_prefix . 'include_css',
-				'Include default CSS',
-				array( 'UCF_Chart_Config', 'display_settings_field' ),
-				'ucf_chart',
-				'ucf_chart_section_assets',
-				array(
-					'label_for'   => self::$option_prefix . 'include_css',
-					'description' => 'When checked, the included default CSS will be enqueued on all pages.',
-					'type'        => 'checkbox'
-				)
 			);
 
 			register_setting(
