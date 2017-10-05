@@ -24,6 +24,7 @@ include_once 'admin/ucf-charts-config.php';
 include_once 'admin/ucf-charts-admin.php';
 include_once 'includes/ucf-charts-common.php';
 include_once 'includes/ucf-charts-posttype.php';
+include_once 'shortcodes/ucf-charts-shortcode.php';
 
 if ( ! function_exists( 'ucf_charts_plugin_activation' ) ) {
 	function ucf_charts_plugin_activation() {
@@ -56,6 +57,8 @@ if ( ! function_exists( 'ucf_charts_init' ) ) {
 		add_action( 'manage_posts_custom_column', array( 'UCF_Chart_Admin', 'ucf_chart_shortcode_column' ), 10, 2 );
 		/* Enqueue frontend assets */
 		add_action( 'wp_enqueue_scripts', array( 'UCF_Chart_Common', 'enqueue_frontend_assets' ), 10, 0 );
+		/* Add shortcode */
+		add_action( 'init', array( 'UCF_Chart_Shortcode', 'register' ), 10, 0 );
 	}
 
 	add_action( 'plugins_loaded', 'ucf_charts_init' );

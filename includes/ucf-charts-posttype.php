@@ -151,8 +151,8 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 				update_post_meta( $post_id, 'ucf_chart_type', $chart_type );
 			}
 
-			if ( ! add_post_meta( $post_id, 'ucf_chart_data_json', $json, true ) ) {
-				update_post_meta( $post_id, 'ucf_chart_data_json', $json );
+			if ( ! add_post_meta( $post_id, 'ucf_chart_data_json', $data_json, true ) ) {
+				update_post_meta( $post_id, 'ucf_chart_data_json', $data_json );
 			}
 
 			if ( ! add_post_meta( $post_id, 'ucf_chart_options_json', $options_json, true ) ) {
