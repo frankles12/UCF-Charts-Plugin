@@ -18,6 +18,8 @@ define( 'UCF_CHARTS__PLUGIN_URL', plugins_url( basename( dirname( __FILE__ ) ) )
 define( 'UCF_CHARTS__STATIC_URL', UCF_CHARTS__PLUGIN_URL . '/static' );
 define( 'UCF_CHARTS__JS_URL', UCF_CHARTS__STATIC_URL . '/js' );
 
+define( 'UCF_CHARTS__VENDOR_JS_URL', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js' );
+
 include_once 'admin/ucf-charts-config.php';
 include_once 'admin/ucf-charts-admin.php';
 include_once 'includes/ucf-charts-common.php';
@@ -52,6 +54,8 @@ if ( ! function_exists( 'ucf_charts_init' ) ) {
 		/* Add custom column */
 		add_action( 'manage_ucf_chart_posts_columns', array( 'UCF_Chart_Admin', 'ucf_chart_custom_columns' ), 10, 1 );
 		add_action( 'manage_posts_custom_column', array( 'UCF_Chart_Admin', 'ucf_chart_shortcode_column' ), 10, 2 );
+		/* Enqueue frontend assets */
+		add_action( 'wp_enqueue_scripts', array( 'UCF_Chart_Common', 'enqueue_frontend_assets' ), 10, 0 );
 	}
 
 	add_action( 'plugins_loaded', 'ucf_charts_init' );

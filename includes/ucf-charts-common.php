@@ -26,8 +26,29 @@ if ( ! class_exists( 'UCF_Chart_Common' ) ) {
 			return $chart_types;
 		}
 
+		/**
+		 * Handles enqueuing frontend assets
+		 * @author Jim Barnes
+		 * @since 1.0.0
+		 **/
 		public static function enqueue_frontend_assets() {
+			if ( UCF_Chart_Config::get_option_or_default( 'include_js' ) ) {
+				wp_enqueue_script(
+					'chart-js',
+					UCF_CHARTS__VENDOR_JS_URL,
+					array( 'jquery' ),
+					null,
+					True
+				);
+			}
 
+			wp_enqueue_script(
+				'ucf-chart',
+				UCF_CHARTS__JS_URL . '/ucf-chart.min.js',
+				array( 'jquery', 'chart-js' ),
+				null,
+				True
+			);
 		}
 	}
 }
