@@ -7,8 +7,9 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static
 			$option_prefix    = 'ucf_charts_',
 			$options_defaults = array(
-				'include_js'  => True,
-				'include_css' => True
+				'include_js'     => True,
+				'include_css'    => True,
+				'include_fields' => True
 			);
 
 		/**
@@ -20,8 +21,9 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static function add_options() {
 			$defaults = self::$options_defaults;
 
-			add_option( self::$option_prefix . 'include_js',  $defaults['include_js'] );
-			add_option( self::$option_prefix . 'include_css', $defaults['include_css'] );
+			add_option( self::$option_prefix . 'include_js',     $defaults['include_js']  );
+			add_option( self::$option_prefix . 'include_css',    $defaults['include_css'] );
+			add_option( self::$option_prefix . 'include_fields', $defaults['include_fields'] );
 		}
 
 		/**
@@ -33,6 +35,7 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static function delete_options() {
 			delete_option( self::$option_prefix . 'include_js' );
 			delete_option( self::$option_prefix . 'include_css' );
+			delete_option( self::$option_prefix . 'include_fields' );
 		}
 
 		/**
@@ -46,8 +49,9 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 			$defaults = self::$options_defaults;
 
 			$configurable_defaults = array(
-				'include_js'  => get_option( self::$option_prefix . 'include_css' ),
-				'include_css' => get_option( self::$option_prefix . 'include_js' )
+				'include_js'     => get_option( self::$option_prefix . 'include_css' ),
+				'include_css'    => get_option( self::$option_prefix . 'include_js' ),
+				'include_fields' => get_option( self::$option_prefix . 'include_fields' )
 			);
 
 			$configurable_defaults = self::format_options( $configurable_defaults );
@@ -92,14 +96,17 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static function format_options( $list ) {
 			foreach( $list as $key => $val ) {
 				switch( $key ) {
-					case 'include_css':
-					case 'include_js' :
-						$list[$key] = filter_val( $val, FILTER_VALIDATE_BOOLEAN );
+					case 'include_css'    :
+					case 'include_js'     :
+					case 'include_fields' :
+						$list[$key] = filter_var( $val, FILTER_VALIDATE_BOOLEAN );
 						break;
 					default:
 						break;
 				}
 			}
+
+			return $list;
 		}
 
 		/**
@@ -130,7 +137,7 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		public static function settings_init() {
 			// Register settings
 			add_settings_section(
-				'ucf_charts_section_assets',
+				'ucf_chart_section_assets',
 				'Included Assets',
 				null,
 				'ucf_chart'
@@ -168,6 +175,24 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 				array(
 					'label_for'   => self::$option_prefix . 'include_js',
 					'description' => 'When checked the included default JS will be enqueued on all pages. (Note: You must initiate all charts manually in your theme javascript file if this is unchecked).',
+					'type'        => 'checkbox'
+				)
+			);
+
+			register_setting(
+				'ucf_chart',
+				self::$option_prefix . 'include_fields'
+			);
+
+			add_settings_field(
+				self::$option_prefix . 'include_fields',
+				'Include default Fields',
+				array( 'UCF_Chart_Config', 'display_settings_field' ),
+				'ucf_chart',
+				'ucf_chart_section_assets',
+				array(
+					'label_for'   => self::$option_prefix . 'include_fields',
+					'description' => 'When checked, the default meta fields will be included. Uncheck to define fields using a framework like Advanced Custom Fields.',
 					'type'        => 'checkbox'
 				)
 			);

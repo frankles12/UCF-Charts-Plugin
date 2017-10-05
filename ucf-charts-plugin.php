@@ -16,8 +16,10 @@ define( 'UCF_CHARTS__PLUGIN_FILE', __FILE__ );
 define( 'UCF_CHARTS__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UCF_CHARTS__PLUGIN_URL', plugins_url( basename( dirname( __FILE__ ) ) ) );
 define( 'UCF_CHARTS__STATIC_URL', UCF_CHARTS__PLUGIN_URL . '/static' );
+define( 'UCF_CHARTS__JS_URL', UCF_CHARTS__STATIC_URL . '/js' );
 
 include_once 'admin/ucf-charts-config.php';
+include_once 'includes/ucf-charts-common.php';
 include_once 'includes/ucf-charts-posttype.php';
 
 if ( ! function_exists( 'ucf_charts_plugin_activation' ) ) {
@@ -43,6 +45,7 @@ if ( ! function_exists( 'ucf_charts_init' ) ) {
 		/* Register settings */
 		add_action( 'admin_init', array( 'UCF_Chart_Config', 'settings_init' ) );
 		add_action( 'admin_menu', array( 'UCF_Chart_Config', 'add_options_page' ) );
+		add_action( 'admin_enqueue_scripts', array( 'UCF_Chart_PostType', 'admin_enqueue_scripts' ), 10, 1 );
 		/* Register post type on init */
 		add_action( 'init', array( 'UCF_Chart_PostType', 'register' ), 10, 0 );
 	}

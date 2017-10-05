@@ -20,8 +20,11 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 			);
 
 			register_post_type( 'ucf_chart', self::args( $labels ) );
-			//add_action( 'add_meta_boxes', array( 'UCF_Chart_PostType', 'register_metaboxes' ) );
-			//add_action( 'save_post', array( 'UCF_Chart_PostType', 'save_metaboxes' ) );
+
+			if ( UCF_Chart_Config::get_option_or_default( 'include_fields' ) ) {
+				add_action( 'add_meta_boxes', array( 'UCF_Chart_PostType', 'register_metaboxes' ) );
+				add_action( 'save_post', array( 'UCF_Chart_PostType', 'save_metaboxes' ) );
+			}
 		}
 
 		/**
@@ -30,7 +33,14 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 		 * @since 1.0.0
 		 **/
 		public static function register_metaboxes() {
-
+			add_meta_box(
+				'ucf_chart_metabox',
+				'UCF Chart Fields',
+				array( 'UCF_Chart_PostType', 'register_fields' ),
+				'ucf_chart',
+				'normal',
+				'low'
+			);
 		}
 
 		/**
@@ -41,7 +51,54 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 		 * @return string The html output for the ucf_chart_metabox
 		 **/
 		public static function register_fields( $post ) {
+			wp_nonce_field( 'ucf_chart_nonce_save', 'ucf_chart_nonce' );
+			$upload_link = esc_url( get_upload_iframe_src( 'media', $post->ID ) );
 
+			$chart_types = UCF_Chart_Common::get_chart_types();
+
+			$chart_type = get_post_meta( $post->ID, 'ucf_chart_type', TRUE );
+			$json       = get_post_meta( $post->ID, 'ucf_chart_json', TRUE );
+			$json_url   = wp_get_attachment_url( $json );
+
+			// Existing asset IDs are invalid if the attachment URL can't be retrieved
+			// (i.e. if the attachment was deleted).
+			if ( $json_url ) {
+				$json = null;
+			}
+?>
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<th><strong>Chart Type</strong></th>
+						<td>
+							<select class="meta-select-field" id="ucf_chart_type" name="ucf_chart_type">
+							<?php foreach( $chart_types as $key => $val ) : ?>
+								<option value="<?php echo $key; ?>"<?php echo ( $chart_type === $key ) ? ' selected' : ''; ?>><?php echo $val; ?></option>
+							<?php endforeach; ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><strong>Chart Data JSON</strong></th>
+						<td>
+							<div class="json-preview meta-file-wrap <?php echo empty( $json ) ? ' hidden' : ''?>">
+								<span class="dashicons dashicons-media-code"></span>
+								<span class="ucf_chart_json_filename"><?php echo ! empty( $json_url ) ? basename( $json_url ) : ''; ?></span>
+							</div>
+							<p class="hide-if-no-js">
+								<a class="json-upload meta-file-upload <?php echo ! empty ( $json ) ? ' hidden' : ''; ?>" href="<?php echo $upload_link; ?>">
+									Add File
+								</a>
+								<a class="json-remove meta-file-upload <?php echo empty( $json ) ? ' hidden' : ''; ?>" href="#">
+									Remove File
+								</a>
+							</p>
+							<input class="meta-file-field" id="ucf_chart_json" name="ucf_chart_json" type="hidden" value="<?php echo ! empty( $json ) ? htmlentities( $json ) : ''; ?>">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+<?php
 		}
 
 		/**
@@ -51,7 +108,46 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 		 * @param int $post_id The id of the post being saved
 		 **/
 		public static function save_metaboxes( $post_id ) {
+			$post_type = get_post_type( $post_id );
 
+			// If not a ucf_chart, return;
+			if ( $post_type !== 'ucf_chart' ) return;
+
+			// If the nonce is not present or is invalid, return.
+			if (
+				! isset( $_POST['ucf_chart_nonce'] )
+				|| ! wp_verify_nonce( $_POST['ucf_chart_nonce'], 'ucf_chart_nonce_save' )
+			) return;
+
+			$chart_type = isset( $_POST['ucf_chart_type'] ) ? $_POST['ucf_chart_type'] : null;
+			$json       = isset( $_POST['ucf_chart_json'] ) ? $_POST['ucf_chart_json'] : null;
+
+			if ( ! add_post_meta( $post_id, 'ucf_chart_type', $chart_type, true ) ) {
+				update_post_meta( $post_id, 'ucf_chart_type', $chart_type );
+			}
+
+			if ( ! add_post_meta( $post_id, 'ucf_chart_json', $json, true ) ) {
+				update_post_meta( $post_id, 'ucf_chart_json', $json );
+			}
+		}
+
+		public static function admin_enqueue_scripts( $hook ) {
+			global $post;
+
+			if (
+				( $hook === 'post-new.php' || $hook === 'post.php' )
+				&& 'ucf_chart' === $post->post_type ) {
+
+				wp_enqueue_media();
+
+				wp_enqueue_script(
+					'ucf_chart_admin_script',
+					UCF_CHARTS__JS_URL . '/ucf-chart-admin.min.js',
+					array( 'jquery' ),
+					null,
+					true
+				);
+			}
 		}
 
 		/**
