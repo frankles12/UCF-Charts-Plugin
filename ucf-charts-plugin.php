@@ -32,7 +32,7 @@ if ( ! function_exists( 'ucf_charts_plugin_activation' ) ) {
 
 if  ( ! function_exists( 'ucf_charts_plugin_deactivation' ) ) {
 	function ucf_charts_plugin_deactivation() {
-		UCF_Charts_Config::delete_options();
+		UCF_Chart_Config::delete_options();
 	}
 
 	register_deactivation_hook( UCF_CHARTS__PLUGIN_FILE, 'ucf_charts_plugin_deactivation' );
