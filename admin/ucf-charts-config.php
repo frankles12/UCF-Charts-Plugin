@@ -245,7 +245,7 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 			$page_title = 'UCF Charts Settings';
 			$menu_title = 'UCF Charts';
 			$capability = 'manage_options';
-			$menu_slug  = 'ucf_chart',
+			$menu_slug  = 'ucf_chart';
 			$callback   = array( 'UCF_Chart_Config', 'options_page_html' );
 
 			return add_options_page(
@@ -280,3 +280,5 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		}
 	}
 }
+
+?>

@@ -130,5 +130,19 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 
 			return $args;
 		}
+
+		/**
+		 * Registers the taxonomies assigned to ucf_chart
+		 * @author Jim Barnes
+		 * @since 1.0.0
+		 * @return array The array of taxonomies
+		 **/
+		public static function taxonomies() {
+			$taxonomies = array();
+
+			$taxonomies = apply_filters( 'ucf_chart_taxonomies', $taxonomies );
+
+			return $taxonomies;
+		}
 	}
 }
