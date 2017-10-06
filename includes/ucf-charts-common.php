@@ -50,5 +50,20 @@ if ( ! class_exists( 'UCF_Chart_Common' ) ) {
 				True
 			);
 		}
+
+		/**
+		* Allow extra file types to be uploaded to the media library.
+		* @author Jim Barnes
+		* @since 1.0.0
+		* @param array $mimes The array of mime types allowed to be uploaded to wp media
+		* @return array The modified array of mime types
+		**/
+		public static function custom_mimes( $mimes ) {
+			if ( ! key_exists( $mimes['json'] ) ) {
+				$mimes['json'] = 'application/json';
+			}
+
+			return $mimes;
+		}
 	}
 }

@@ -58,7 +58,9 @@ if ( ! function_exists( 'ucf_charts_init' ) ) {
 		/* Enqueue frontend assets */
 		add_action( 'wp_enqueue_scripts', array( 'UCF_Chart_Common', 'enqueue_frontend_assets' ), 10, 0 );
 		/* Add shortcode */
-		add_action( 'init', array( 'UCF_Chart_Shortcode', 'register' ), 10, 0 );
+        add_action( 'init', array( 'UCF_Chart_Shortcode', 'register' ), 10, 0 );
+        /* Add hook to allow for json uploads */
+        add_filter( 'upload_mimes', array( 'UCF_Chart_Common', 'custom_mimes' ), 10, 1 );
 	}
 
 	add_action( 'plugins_loaded', 'ucf_charts_init' );

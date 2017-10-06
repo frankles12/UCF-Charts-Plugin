@@ -35,6 +35,8 @@ if ( ! class_exists( 'UCF_Chart_Shortcode' ) ) {
 			if ( $id ) {
 				$chart = get_post( $id );
 
+				if ( ! $chart ) return;
+
 				if ( 'ucf_chart' !== $chart->post_type ) return '';
 
 				$name         = $chart->post_name;
