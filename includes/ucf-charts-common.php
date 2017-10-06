@@ -59,7 +59,7 @@ if ( ! class_exists( 'UCF_Chart_Common' ) ) {
 		* @return array The modified array of mime types
 		**/
 		public static function custom_mimes( $mimes ) {
-			if ( ! key_exists( $mimes['json'] ) ) {
+			if ( ! key_exists( 'json', $mimes ) ) {
 				$mimes['json'] = 'application/json';
 			}
 
