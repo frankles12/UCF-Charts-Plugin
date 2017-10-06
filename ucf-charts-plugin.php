@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: UCF Charts Plugin
-Version: 0.0.1
+Version: 1.0.0
 Author: UCF Web Communications
 Description: Provides shortcode for creating chart.js charts.
 Plugin URL: https://github.com/UCF/UCF-Charts-Plugin/

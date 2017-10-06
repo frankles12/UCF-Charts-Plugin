@@ -29,7 +29,9 @@ Provides custom post type and shortcode for creating [chart.js](http://www.chart
 
 == Changelog ==
 
-n/a
+= 1.0.0 =
+
+* Initial Release
 
 
 == Upgrade Notice ==
