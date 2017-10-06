@@ -282,5 +282,3 @@ if ( ! class_exists( 'UCF_Chart_Config' ) ) {
 		}
 	}
 }
-
-?>
