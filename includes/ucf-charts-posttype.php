@@ -55,7 +55,10 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 			$upload_link = esc_url( get_upload_iframe_src( 'media', $post->ID ) );
 
 			$chart_types = UCF_Chart_Common::get_chart_types();
+            // Include new values for direct link data
 
+            $directLink       = get_post_meta( $post->ID, 'ucf_chart_data_json', TRUE );
+            $directLink_url   = wp_get_attachment_url( $directLink );
 			$chart_type       = get_post_meta( $post->ID, 'ucf_chart_type', TRUE );
 			$data_json        = get_post_meta( $post->ID, 'ucf_chart_data_json', TRUE );
 			$data_json_url    = wp_get_attachment_url( $data_json );
@@ -71,6 +74,12 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 			if ( ! $options_json_url ) {
 				$options_json = null;
 			}
+
+            if ( ! $directLink_url ) {
+                $options_json = null;
+            }
+
+            // Add an input value in the section below for the url input *******
 ?>
 			<table class="form-table">
 				<tbody>
@@ -120,6 +129,22 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 							<input class="meta-file-field" id="ucf_chart_options_json" name="ucf_chart_options_json" type="hidden" value="<?php echo ! empty( $options_json ) ? htmlentities( $options_json ) : ''; ?>">
 						</td>
 					</tr>
+                    <tr>
+                        <th><strong>Direct Link</strong></th>
+                        <td>
+                            <div class="options-json-preview meta-file-wrap <?php echo empty( $options_json ) ? ' hidden' : ''?>">
+                                <span class="dashicons dashicons-media-code"></span>
+                                <span class="directLink_filename"><?php echo ! empty( $directLink_url ) ? basename( $directLink_url ) : ''; ?></span>
+                            </div>
+                            <p class="hide-if-no-js">
+                            <form action="#">
+                                Direct Link: <input type="text" name="directLink"><br>
+                                <input type="submit" value="Submit">
+                            </form>
+                            </p>
+                            <input class="meta-file-field" id="directLink" name="directLink" type="hidden" value="<?php echo ! empty( $options_json ) ? htmlentities( $options_json ) : ''; ?>">
+                        </td>
+                    </tr>
 				</tbody>
 			</table>
 <?php
@@ -146,6 +171,7 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 			$chart_type   = isset( $_POST['ucf_chart_type'] ) ? $_POST['ucf_chart_type'] : null;
 			$data_json    = isset( $_POST['ucf_chart_data_json'] ) ? $_POST['ucf_chart_data_json'] : null;
 			$options_json = isset( $_POST['ucf_chart_options_json'] ) ? $_POST['ucf_chart_options_json'] : null;
+			$directLink   = isset( $_POST['directLink'] ) ? $_POST['directLink'] : null;
 
 			if ( ! add_post_meta( $post_id, 'ucf_chart_type', $chart_type, true ) ) {
 				update_post_meta( $post_id, 'ucf_chart_type', $chart_type );
@@ -158,6 +184,10 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 			if ( ! add_post_meta( $post_id, 'ucf_chart_options_json', $options_json, true ) ) {
 				update_post_meta( $post_id, 'ucf_chart_options_json', $options_json );
 			}
+
+            if ( ! add_post_meta( $post_id, 'directLink', $directLink, true ) ) {
+                update_post_meta( $post_id, 'directLink', $directLink, true);
+            }
 		}
 
 		public static function admin_enqueue_scripts( $hook ) {

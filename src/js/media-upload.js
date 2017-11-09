@@ -29,6 +29,7 @@ const ucfChartMediaUpload = ($) => {
       button: {
         text: 'Use this JSON File'
       },
+
       library: {
         text: 'application/json'
       },
@@ -53,6 +54,13 @@ const ucfChartMediaUpload = ($) => {
     if (optsJsonFrame) {
       optsJsonFrame.open();
       return;
+    }
+
+
+    // Check if dataJsonFrame is empty
+
+    if (!dataJsonFrame.length) {
+
     }
 
     optsJsonFrame = wp.media({
