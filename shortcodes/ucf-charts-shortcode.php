@@ -50,7 +50,7 @@ if ( ! class_exists( 'UCF_Chart_Shortcode' ) ) {
 				if ( ! $data_file ) return '';
 
 				$args = array(
-					'id'              => `custom-chart-{$id}`,
+					'id'              => "custom-chart-{$id}",
 					'class'           => $class,
 					'data-chart-type' => $chart_type,
 					'data-chart-data' => $data_file
