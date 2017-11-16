@@ -6,84 +6,84 @@ const ucfChartMediaUpload = ($) => {
   const $metaBox      = $('#ucf_chart_metabox');
   const $addDataJsonLink  = $metaBox.find('.data-json-upload');
   const $dataJsonInput    = $metaBox.find('#ucf_chart_data_json');
-  const $dataJsonFilename = $metaBox.find('#ucf_chart_data_json_filename');
+  const $dataJsonFilename = $metaBox.find('.ucf_chart_data_json_filename');
   const $dataJsonPreview  = $metaBox.find('.data-json-preview');
   const $delDataJsonLink  = $metaBox.find('.data-json-remove');
 
   const $addOptsJsonLink  = $metaBox.find('.options-json-upload');
   const $optsJsonInput    = $metaBox.find('#ucf_chart_options_json');
-  const $optsJsonFilename = $metaBox.find('#ucf_chart_options_json_filename');
+  const $optsJsonFilename = $metaBox.find('.ucf_chart_options_json_filename');
   const $optsJsonPreview  = $metaBox.find('.options-json-preview');
   const $delOptsJsonLink  = $metaBox.find('.options-json-remove');
 
-  const addDataJson = (e) => {
+  const createFrame = (e) => {
+    let dataJson = false;
     e.preventDefault();
 
-    if (dataJsonFrame) {
-      dataJsonFrame.open();
-      return;
+    if ($(e.target).hasClass('data-json-upload')) {
+      dataJson = true;
+    } else {
+      dataJson = false;
     }
 
-    dataJsonFrame = wp.media({
-      title: 'Select or upload the json data for this chart.',
-      button: {
-        text: 'Use this JSON File'
-      },
-
-      library: {
-        text: 'application/json'
-      },
-      multiple: false
-    });
-
-    dataJsonFrame.on('select', () => {
-      const attachment = dataJsonFrame.state().get('selection').first().toJSON();
-      $dataJsonPreview.removeClass('hidden');
-      $dataJsonInput.val(attachment.id);
-      $dataJsonFilename.text(attachment.filename);
-      $addDataJsonLink.addClass('hidden');
-      $delDataJsonLink.removeClass('hidden');
-    });
-
-    dataJsonFrame.open();
-  };
-
-  const addOptsJson = (e) => {
-    e.preventDefault();
-
-    if (optsJsonFrame) {
+    if (dataJson) {
+      if (dataJsonFrame) {
+        dataJsonFrame.open();
+        return;
+      }
+    } else if (optsJsonFrame) {
       optsJsonFrame.open();
       return;
     }
 
-
-    // Check if dataJsonFrame is empty
-
-    if (!dataJsonFrame.length) {
-
-    }
-
-    optsJsonFrame = wp.media({
-      title: 'Select or upload the json options for this chart.',
+    let title;
+    const btnText = 'Use this JSON File';
+    const fileType = 'application/json';
+    const args = {
+      title,
       button: {
-        text: 'Use this JSON File'
+        text: btnText
       },
+
       library: {
-        text: 'application/json'
+        type: fileType
       },
       multiple: false
-    });
+    };
 
-    optsJsonFrame.on('select', () => {
-      const attachment = optsJsonFrame.state().get('selection').first().toJSON();
-      $optsJsonPreview.removeClass('hidden');
-      $optsJsonInput.val(attachment.id);
-      $optsJsonFilename.text(attachment.filename);
-      $addOptsJsonLink.addClass('hidden');
-      $delOptsJsonLink.removeClass('hidden');
-    });
+    if (dataJson) {
+      title = 'Select or upload the json data for this chart.';
+    } else {
+      title = 'Select or upload the json options for this chart.';
+    }
 
-    optsJsonFrame.open();
+    if (dataJson) {
+      dataJsonFrame = wp.media(args);
+
+      dataJsonFrame.on('select', () => {
+        const attachment = dataJsonFrame.state().get('selection').first().toJSON();
+        $dataJsonPreview.removeClass('hidden');
+        $dataJsonInput.val(attachment.id);
+        $dataJsonFilename.text(attachment.filename);
+        $addDataJsonLink.addClass('hidden');
+        $delDataJsonLink.removeClass('hidden');
+      });
+
+      dataJsonFrame.open();
+    } else {
+      optsJsonFrame = wp.media(args);
+
+      optsJsonFrame.on('select', () => {
+        const attachment = optsJsonFrame.state().get('selection').first().toJSON();
+        $optsJsonPreview.removeClass('hidden');
+        $optsJsonInput.val(attachment.id);
+        $optsJsonFilename.text(attachment.filename);
+        $addOptsJsonLink.addClass('hidden');
+        $delOptsJsonLink.removeClass('hidden');
+      });
+
+      optsJsonFrame.open();
+    }
   };
 
   const removeMedia = (e) => {
@@ -107,10 +107,10 @@ const ucfChartMediaUpload = ($) => {
     }
   };
 
-  $addDataJsonLink.on('click', addDataJson);
+  $addDataJsonLink.on('click', createFrame);
   $delDataJsonLink.on('click', removeMedia);
 
-  $addOptsJsonLink.on('click', addOptsJson);
+  $addOptsJsonLink.on('click', createFrame);
   $delOptsJsonLink.on('click', removeMedia);
 };
 

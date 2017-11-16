@@ -27,7 +27,8 @@ const ucfCharts = function ($) {
           $.extend(options, options, json);
         })
       ).then(() => {
-        const $chartLegend = $(`.chart-legend-${$chart.attr('id')}`);
+        const chartID = $chart.attr('id').replace('custom-chart-', '');
+        const $chartLegend = $(`.chart-legend-${chartID}`);
         let chart = {};
         switch (type.toLowerCase()) {
           case 'bar':

@@ -39,7 +39,7 @@ if ( ! class_exists( 'UCF_Chart_Shortcode' ) ) {
 
 				if ( 'ucf_chart' !== $chart->post_type ) return '';
 
-				$name         = $chart->post_name;
+				$id           = $chart->ID;
 				$class        = ! empty( $class ) ? 'custom-chart ' . $class : 'custom-chart';
 				$chart_type   = get_post_meta( $chart->ID, 'ucf_chart_type', TRUE );
 				$data_json    = get_post_meta( $chart->ID, 'ucf_chart_data_json', TRUE );
@@ -50,7 +50,7 @@ if ( ! class_exists( 'UCF_Chart_Shortcode' ) ) {
 				if ( ! $data_file ) return '';
 
 				$args = array(
-					'id'              => $name,
+					'id'              => "custom-chart-{$id}",
 					'class'           => $class,
 					'data-chart-type' => $chart_type,
 					'data-chart-data' => $data_file
