@@ -26,3 +26,4 @@ node_modules/
 bower_components/
 .sass-cache/
 *.log
+\.idea/

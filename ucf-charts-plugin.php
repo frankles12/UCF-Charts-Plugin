@@ -65,3 +65,7 @@ if ( ! function_exists( 'ucf_charts_init' ) ) {
 
 	add_action( 'plugins_loaded', 'ucf_charts_init' );
 }
+
+
+// Hi, I am here
+// I am also here
