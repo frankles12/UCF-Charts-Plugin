@@ -87,6 +87,7 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 <?php
             echo '<p id="typeSelector">dynamic | <a href="#" class="static">static</a></p>';
 
+            //The echo statements below are strictly for testing purposes
             echo '<div id="static">
                     <h2>This is displaying the static section</h2>
                     </div>';
@@ -201,6 +202,45 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
               }
 
             </script>
+            <style>
+                .static {
+
+                    background: linear-gradient(#f44336, #FF8F86);
+                    color: white;
+                    padding: 7px 12px;
+                    border-radius: 25px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+
+                }
+
+                .static:hover {
+                    background:linear-gradient(#f44336, #FF685C);
+                    background-color: #f44336;
+                    color: white;
+                }
+
+                .dynamic:hover {
+                    background:linear-gradient(#238795, #3E99A6);
+                    background-color: #238795;
+                    color: white;
+                }
+
+                .dynamic {
+
+                    background:linear-gradient(#238795, #68B8C3);
+                    color: white;
+                    padding: 7px 12px;
+                    border-radius: 25px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+
+                }
+            </style>
+
+
             <?php
         }
 
