@@ -132,6 +132,7 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
                     </td>
                 </tr>
 
+                <!--- Info Point 3 --->
                 <!--- Provides Input fields for static data --->
                 <tr id="staticInput">
                     <th><strong>Static JSON Chart Data</strong></th>
