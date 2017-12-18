@@ -81,11 +81,11 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
 
 
             ?>
-            <!--******** Third Try *************-->
 
-
+            <!--- Info Point 1 -->
+            <!--- PHP for changing the view inside the UI --->
 <?php
-            echo '<p id="typeSelector">dynamic | <a href="#" class="static">static</a></p>';
+            echo '<p id="typeSelector">Dynamic File | <a href="#" class="static">Static File</a></p>';
 
             //The echo statements below are strictly for testing purposes
             echo '<div id="static">
@@ -94,7 +94,8 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
             echo '<div id="dynamic">
                     <h2>This is displaying the dynamic section</h2>
                     </div>';
-?>
+?>          <!-- Info Point 2 -->
+            <!--- JavaScript for providing functionality to the buttons --->
             <script>
 
             $('#typeSelector').on('click', 'a', function () {
@@ -130,6 +131,8 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
                         </select>
                     </td>
                 </tr>
+
+                <!--- Provides Input fields for static data --->
                 <tr id="staticInput">
                     <th><strong>Static JSON Chart Data</strong></th>
                     <td>
@@ -148,6 +151,8 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
                         <input class="meta-file-field" id="ucf_chart_data_json" name="ucf_chart_data_json" type="hidden" value="<?php echo ! empty( $data_json ) ? htmlentities( $data_json ) : ''; ?>">
                     </td>
                 </tr>
+
+                <!--- Provides Input fields for dynamic data --->
                 <tr id="dynamicInput">
                     <th><strong>Dynamic Chart Data</strong></th>
                     <td>
@@ -396,19 +401,9 @@ if ( ! class_exists( 'UCF_Chart_PostType' ) ) {
     }
 }
 ?>
+
+<!-- jQuery include -->
 <script
         src="https://code.jquery.com/jquery-3.2.1.js"
         integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
         crossorigin="anonymous"></script>
-<script>
-  $('.button').click(function(){
-    var clickBtnValue = $(this).val();
-    var ajaxurl = 'ucf-charts-posttype.php',
-      data =  {'action': clickBtnValue};
-    $.post(ajaxurl, data, function (response) {
-      // Response div goes here.
-        console.log('Something works');
-      alert("action performed successfully");
-    });
-  })
-</script>
